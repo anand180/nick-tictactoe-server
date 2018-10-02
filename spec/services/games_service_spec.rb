@@ -35,7 +35,6 @@ RSpec.describe GamesService do
       end
 
       it "completes the game" do
-        binding.pry
         expect(game.reload.completed).to be true
       end
     end

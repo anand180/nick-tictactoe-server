@@ -9,4 +9,8 @@ class Move < ApplicationRecord
     player == game.x_player ? 'x' : 'o'
   end
 
+  def made_by_last_player?
+    player_id == game.moves.order(:created_at).last.player_id
+  end
+
 end

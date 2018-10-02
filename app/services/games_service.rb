@@ -19,18 +19,18 @@ class GamesService
   end
 
   def self.make_move(move_params)
-    if Game.find(move_params[:game_id]).o_player
-      if move_params[:player_id] == _determine_turn(Game.find(move_params[:game_id]))
-        Move.create!(move_params)
-        _check_win(:game => Game.find(move_params[:game_id]))
-      end
-    end
+    game = Game.find(move_params[:game_id])
+    return unless game.ready?
+    return unless move_params[:player_id] == game.turn_player_id
+
+    Move.create!(move_params)
+    _check_win(:game => game)
   end
 
   def self.generate_game_state(game_id)
     game = Game.find(game_id)
-    GameState.new(:turn_id => _determine_turn(game),
-                  :board => Board.new(game.moves))
+    GameState.new(:turn_id => game.turn_player_id,
+                  :board   => Board.new(game.moves))
   end
 
   private
@@ -41,20 +41,10 @@ class GamesService
 
   def self._check_win(game:)
     WinStates::ALL.each do |win_state|
-      moves = game.moves.where(:position => win_state)
-      if moves.count == 3
-        if moves.all? {|move| move.player_id == game.moves.last.player_id}
-          game.update!(:completed => true)
-        end
-      end
+      moves_in_winstate = game.moves.where(:position => win_state)
+      return unless moves_in_winstate.count == 3
+      return unless moves_in_winstate.all? {|move| move.made_by_last_player?}
+      game.update!(:completed => true)
     end
-  end
-
-  def self._determine_turn(game)
-    if game.new_game?
-      return game.x_player_id if game.x_first
-      return game.o_player_id
-    end
-    game.moves.last.player_id == game.x_player_id ? game.o_player_id : game.x_player_id
   end
 end
