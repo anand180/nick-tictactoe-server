@@ -18,7 +18,8 @@ ActiveRecord::Schema.define(version: 2018_09_26_192122) do
   create_table "games", force: :cascade do |t|
     t.integer "x_player_id"
     t.integer "o_player_id"
-    t.boolean "completed"
+    t.boolean "completed", default: false
+    t.boolean "x_first"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
   end
@@ -36,7 +37,6 @@ ActiveRecord::Schema.define(version: 2018_09_26_192122) do
     t.string "email"
   end
 
-  add_foreign_key "games", "players", column: "o_player_id"
   add_foreign_key "games", "players", column: "x_player_id"
   add_foreign_key "moves", "games"
   add_foreign_key "moves", "players"

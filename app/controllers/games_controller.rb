@@ -4,13 +4,14 @@ class GamesController < ApplicationController
     @games = Game.where(:o_player_id = nil)
   end
 
+  def show
+    @game = Game.find(params[:id])
+    @game_state = GamesService.generate_game_state(params[:id])
+  end
+
   def create
-    result = GamesService.create(:player_id => current_player.id)
-    if result.success?
-      redirect_to :index
-    else
-      render :new
-    end
+    GamesService.create(session[:player_id])
+    redirect_to :index
   end
 
   def update
