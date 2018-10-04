@@ -9,5 +9,6 @@ class CreateGames < ActiveRecord::Migration[5.2]
     end
 
     add_foreign_key :games, :players, :column => :x_player_id
+    add_foreign_key :games, :players, :column => :o_player_id
   end
 end
