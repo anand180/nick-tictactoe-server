@@ -1,26 +1,22 @@
 class GamesController < ApplicationController
 
   def index
-    @games = Game.where(:o_player_id = nil)
+    @games = Game.where(:o_player_id => nil)
   end
 
   def show
-    @game = Game.find(params[:id])
+    @player_id  = current_player.id
     @game_state = GamesService.generate_game_state(params[:id])
   end
 
   def create
-    GamesService.create(session[:player_id])
-    redirect_to :index
+    GamesService.create_game(current_player.id)
+    redirect_to action: 'index'
   end
 
   def update
-    Game.find(params[:game_id]).update!(join_game_params)
+    GamesService.join_game(:player_id => current_player.id, :game_id => params[:id])
+    redirect_to action: 'index'
   end
 
-  private
-
-  def join_game_params
-    params.require(:game).permit(:o_player_id)
-  end
 end

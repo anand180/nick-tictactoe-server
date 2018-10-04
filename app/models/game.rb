@@ -12,7 +12,7 @@ class Game < ApplicationRecord
   end
 
   def ready?
-    o_player.present?
+    o_player.present? && x_player.present?
   end
 
   def turn_player_id

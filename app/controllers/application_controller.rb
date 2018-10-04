@@ -1,5 +1,5 @@
 class ApplicationController < ActionController::Base
   def current_player
-    Player.find(session[:player_id])
+    User.find(session[:user_id]).player
   end
 end

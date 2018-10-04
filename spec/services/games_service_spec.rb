@@ -1,8 +1,8 @@
 require 'rails_helper'
 
 RSpec.describe GamesService do
-  let(:player_o) {Player.create!(:email => "2")}
-  let(:player_x) {Player.create!(:email => "1")}
+  let(:player_o) {Player.create}
+  let(:player_x) {Player.create}
   let(:game) {GamesService.create_game(player_x.id)}
 
   describe ".create_game" do
@@ -46,6 +46,27 @@ RSpec.describe GamesService do
 
       it "does not complete the game" do
         expect(game.reload.completed).to be false
+      end
+    end
+  end
+
+  describe ".join_game" do
+    let(:player) {UserCreator.create_user_and_player("place_holder")}
+    let(:ready_game) {GameCreator.create_ready_game}
+    let(:unready_game) {GameCreator.create_unready_game}
+
+    context "unready game" do
+      it "adds an O player" do
+        GamesService.join_game(:player_id => player.id, :game_id => unready_game.id)
+        expect(unready_game.reload.ready?).to be true
+      end
+    end
+
+    context "ready game" do
+      it "raises an exception" do
+        expect do
+          GamesService.join_game(:player_id => player.id, :game_id => ready_game.id)
+        end.to raise_error(StandardError)
       end
     end
   end
