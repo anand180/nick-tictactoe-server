@@ -14,7 +14,7 @@ class Board
     ]
   end
 
-  BLANK_SPACE = " ".freeze
+  BLANK_SPACE = "_".freeze
 
   attr_reader :state
 

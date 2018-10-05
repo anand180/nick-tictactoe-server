@@ -15,6 +15,7 @@ RSpec.describe GamesController do
     end
 
     it "adds an O player" do
+      binding.pry
       expect(unready_game.reload.ready?).to be true
     end
 
@@ -26,15 +27,16 @@ RSpec.describe GamesController do
   describe "#show" do
     before do
       session[:user_id] = ready_game.x_player.user_id
-      get :show, :params => {:id => ready_game.id}
     end
 
     it "returns ok status" do
+      get :show, :params => {:id => ready_game.id}
       expect(response).to have_http_status(:ok)
     end
 
     it "calls GamesService" do
-      expect_any_instance_of(GamesService).to receive(:generate_game_state).with(ready_game.id).once.and_call_original
+      expect(GamesService).to receive(:generate_game_state).with(ready_game.id).once.and_call_original
+      get :show, :params => {:id => ready_game.id}
     end
   end
 

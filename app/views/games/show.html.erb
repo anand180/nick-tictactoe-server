@@ -1,0 +1,35 @@
+<%= link_to  "See my games", games_path %>
+<h1>GAME <%= @game_state.game_id %></h1>
+
+<table>
+  <tr>
+    <td><%= @game_state.board.value_at_space(0)%></td>
+    <td><%= @game_state.board.value_at_space(1)%></td>
+    <td><%= @game_state.board.value_at_space(2)%></td>
+  </tr>
+  <tr>
+    <td><%= @game_state.board.value_at_space(3)%></td>
+    <td><%= @game_state.board.value_at_space(4)%></td>
+    <td><%= @game_state.board.value_at_space(5)%></td>
+  </tr>
+  <tr>
+    <td><%= @game_state.board.value_at_space(6)%></td>
+    <td><%= @game_state.board.value_at_space(7)%></td>
+    <td><%= @game_state.board.value_at_space(8)%></td>
+  </tr>
+</table>
+
+<% if @player_id == @game_state.turn_id %>
+  <%= form_for @move do |f| %>
+    <div>
+      <%= f.hidden_field :player_id, value: @player_id %>
+      <%= f.hidden_field :game_id, value: @game_state.game_id %>
+      <%= f.text_field :position %>
+    </div>
+    <div>
+      <%= f.submit "MAKE MOVE" %>
+    </div>
+  <% end %>
+<% end %>
+
+

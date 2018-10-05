@@ -10,6 +10,19 @@
   </head>
 
   <body>
+    <% if notice %>
+      <%= notice %>
+    <% end %>
+
+    <% if alert %>
+      <%= alert %>
+    <% end %>
+
+    <% if session[:user_id] %>
+      <%= User.find(session[:user_id]).email %>
+    <% end %>
+
+
     <%= yield %>
   </body>
 </html>
