@@ -80,7 +80,7 @@ RSpec.describe GamesService do
 
     context "game with 0 moves" do
       it "generates a blank board" do
-        expect(game_state.board.state.all? { |space| space == " " }).to be true
+        expect(game_state.board.state.all? { |space| space == "_" }).to be true
       end
 
       it "has x as first turn" do

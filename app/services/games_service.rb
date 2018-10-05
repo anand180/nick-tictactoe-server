@@ -1,5 +1,4 @@
 class GamesService
-
   PlayerTryingToJoinFullGameError = Class.new(StandardError)
   module WinStates
     ALL = [
@@ -11,7 +10,7 @@ class GamesService
       [Board::Spaces::TOP_RIGHT, Board::Spaces::MIDDLE_RIGHT, Board::Spaces::BOTTOM_RIGHT],
       [Board::Spaces::TOP_LEFT, Board::Spaces::MIDDLE_MIDDLE, Board::Spaces::BOTTOM_RIGHT],
       [Board::Spaces::TOP_RIGHT, Board::Spaces::MIDDLE_MIDDLE, Board::Spaces::BOTTOM_LEFT],
-  ]
+    ].freeze
   end
 
   def self.create_game(player_id)
@@ -24,7 +23,7 @@ class GamesService
     return unless game.ready?
     return unless player_id == game.turn_player_id
 
-    Move.create!({:game_id => game_id, :player_id => player_id, :position => position})
+    Move.create!({ :game_id => game_id, :player_id => player_id, :position => position })
     _check_win(:game => game)
   end
 
@@ -41,11 +40,10 @@ class GamesService
     game.update(:o_player_id => player_id)
   end
 
-  private
-
   def self._is_x_first?
-    [true,false].sample
+    [true, false].sample
   end
+  private_class_method :_is_x_first?
 
   def self._check_win(game:)
     WinStates::ALL.each do |win_state|
@@ -55,4 +53,5 @@ class GamesService
       game.update!(:completed => true)
     end
   end
+  private_class_method :_check_win
 end
