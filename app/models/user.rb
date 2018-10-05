@@ -7,5 +7,4 @@ class User < ApplicationRecord
   def player_id
     player.id
   end
-
 end

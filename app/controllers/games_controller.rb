@@ -1,10 +1,12 @@
 class GamesController < ApplicationController
 
   def index
-    @games = Game.where(:o_player_id => nil)
+    @my_games = Game.where(:x_player_id => current_player.id).or(Game.where(:o_player_id => current_player.id))
+    @available_games = Game.where(:o_player_id => nil).where.not(:x_player_id => current_player.id)
   end
 
   def show
+    @move = Move.new
     @player_id  = current_player.id
     @game_state = GamesService.generate_game_state(params[:id])
   end

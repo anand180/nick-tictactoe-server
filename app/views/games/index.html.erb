@@ -1,0 +1,48 @@
+<%= link_to "Log out", logout_path, :method => :delete %><br />
+<hr />
+<%= link_to "CREATE GAME", '/games', :method => :post %>
+<hr/>
+<hr/>
+<h3>My games</h3>
+<hr />
+<table>
+  <tr>
+    <th>Game ID</th>
+    <th></th>
+  </tr>
+
+  <% @my_games.each do |game| %>
+    <tr>
+      <td><%= game.id %></td>
+      <td>
+        <% if game.ready? %>
+          <%= button_to "PLAY", game_path(game), method: :get %>
+        <% end %>
+      </td>
+    </tr>
+  <% end %>
+</table>
+<hr />
+<hr />
+<h3>Available Games</h3>
+<hr />
+<table>
+  <tr>
+    <th>Game ID</th>
+    <th>Host Player ID</th>
+    <th></th>
+  </tr>
+
+  <% @available_games.each do |game| %>
+    <tr>
+      <td>Game <%= game.id %></td>
+      <td>Player <%= game.x_player.id %></td>
+      <td>
+        <%= form_with url: "/games/#{game.id}", method: :patch do |f| %>
+          <%= hidden_field_tag 'id', game.id %>
+          <%= f.submit "JOIN GAME" %>
+        <% end %>
+      </td>
+    </tr>
+  <% end %>
+</table>
