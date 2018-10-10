@@ -1,35 +1,37 @@
 <%= link_to  "See my games", games_path %>
 <h1>GAME <%= @game_state.game_id %></h1>
-
+<p id="game" style= "display: none;"><%= @game_state.game_id %></p>
 <table>
   <tr>
-    <td><%= @game_state.board.value_at_space(0)%></td>
-    <td><%= @game_state.board.value_at_space(1)%></td>
-    <td><%= @game_state.board.value_at_space(2)%></td>
+    <td id="0"><%= @game_state.board.value_at_space(0)%></td>
+    <td id="1"><%= @game_state.board.value_at_space(1)%></td>
+    <td id="2"><%= @game_state.board.value_at_space(2)%></td>
   </tr>
   <tr>
-    <td><%= @game_state.board.value_at_space(3)%></td>
-    <td><%= @game_state.board.value_at_space(4)%></td>
-    <td><%= @game_state.board.value_at_space(5)%></td>
+    <td id="3"><%= @game_state.board.value_at_space(3)%></td>
+    <td id="4"><%= @game_state.board.value_at_space(4)%></td>
+    <td id="5"><%= @game_state.board.value_at_space(5)%></td>
   </tr>
   <tr>
-    <td><%= @game_state.board.value_at_space(6)%></td>
-    <td><%= @game_state.board.value_at_space(7)%></td>
-    <td><%= @game_state.board.value_at_space(8)%></td>
+    <td id="6"><%= @game_state.board.value_at_space(6)%></td>
+    <td id="7"><%= @game_state.board.value_at_space(7)%></td>
+    <td id="8"><%= @game_state.board.value_at_space(8)%></td>
   </tr>
 </table>
 
 <% if @player_id == @game_state.turn_id %>
-  <%= form_for @move do |f| %>
-    <div>
-      <%= f.hidden_field :player_id, value: @player_id %>
-      <%= f.hidden_field :game_id, value: @game_state.game_id %>
-      <%= f.text_field :position %>
-    </div>
-    <div>
-      <%= f.submit "MAKE MOVE" %>
-    </div>
-  <% end %>
+  <% display = 'inline' %>
+<% else %>
+  <% display = 'none' %>
+<% end %>
+
+<%= form_for @move do |f| %>
+  <div id="form" style="display: <%= display %>">
+    <%= f.hidden_field :player_id, value: @player_id %>
+    <%= f.hidden_field :game_id, value: @game_state.game_id %>
+    <%= f.text_field :position %>
+    <%= f.submit "MAKE MOVE" %>
+  </div>
 <% end %>
 
 

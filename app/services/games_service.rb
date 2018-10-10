@@ -25,6 +25,9 @@ class GamesService
 
     Move.create!({ :game_id => game_id, :player_id => player_id, :position => position })
     _check_win(:game => game)
+    ActionCable.server.broadcast "move_channel_#{game_id}",
+      position: Move.where(game_id: game_id).order("created_at").last.position,
+      type: Move.where(game_id: game_id).order("created_at").last.move_type
   end
 
   def self.generate_game_state(game_id)

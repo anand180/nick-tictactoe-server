@@ -11,4 +11,6 @@ Rails.application.routes.draw do
   post   'games/move' => 'moves#create'
 
   resources :games, :moves
+
+  mount ActionCable.server, at: '/cable'
 end
