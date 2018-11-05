@@ -41,6 +41,7 @@ ActiveRecord::Schema.define(version: 2018_10_02_191540) do
   create_table "users", force: :cascade do |t|
     t.string "email"
     t.string "password_digest"
+    t.uuid "uuid"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
   end

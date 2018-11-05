@@ -1,7 +1,7 @@
 require 'rails_helper'
 
 RSpec.describe Board do
-  let(:x_player) {Player.create(:email => "test")}
+  let(:x_player) {UserCreator.create(:email => "test")}
   let(:game)  {GamesService.create_game(x_player.id)}
   let(:board) {Board.new(game.moves)}
 

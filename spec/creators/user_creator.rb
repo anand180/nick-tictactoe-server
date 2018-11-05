@@ -1,8 +1,5 @@
 class UserCreator
-
-  def self.create_user_and_player(email)
-    user = User.create(:email => email, :password => "test")
-    user.create_player
+  def self.create_user(email)
+    User.create(email: email, password: 'test')
   end
-
 end

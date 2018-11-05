@@ -1,28 +1,28 @@
 class UsersController < ApplicationController
+  class UserCreationError < StandardError
+    def message
+      'An unknown error occured when trying to create a new user'
+    end
+  end
 
   def new
     @user = User.new
   end
 
   def create
-    @user = User.new(_user_params)
-    if @user.save
-      @user.create_player
-      flash[:notice] = "Account created successfully"
-      redirect_to login_url
+    result = UserService.create!(_user_params)
+    if result.success?
+      render json: { success: true }
+    elsif result.duplicate?
+      render json: { error: 'This email address is taken' }, status: 422
     else
-      flash.now.alert = "Account could not be created. Please try again"
-      redirect_to :new
+      raise UserCreationError
     end
-  end
-
-  def destroy
   end
 
   private
 
   def _user_params
-    params.require(:user).permit(:email, :password, :password_confirmation)
+    params.require(:signup).permit(:email, :password, :password_confirmation)
   end
-
 end

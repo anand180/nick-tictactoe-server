@@ -1,3 +1,0 @@
-class GameStateService
-
-end

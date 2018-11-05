@@ -7,15 +7,18 @@ class SessionsController < ApplicationController
     user = User.find_by(:email => params[:login][:email].downcase)
     if user && user.authenticate(params[:login][:password])
       session[:user_id] = user.id
-      redirect_to games_path, notice: "Login successful"
+      render :json => { success: true }
     else
-      flash.now.alert = "Incorrect email or password"
-      render :new
+      render :json => { success: false }
     end
   end
 
   def destroy
     session.delete(:user_id)
-    redirect_to login_path, notice: "Logged out"
+    render :json => { success: true }
+  end
+
+  def _login_params
+    params.require(:login).permit(:email, :password)
   end
 end

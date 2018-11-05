@@ -1,5 +1,4 @@
 class GamesService
-  PlayerTryingToJoinFullGameError = Class.new(StandardError)
   module WinStates
     ALL = [
       [Board::Spaces::TOP_LEFT, Board::Spaces::TOP_MIDDLE, Board::Spaces::TOP_RIGHT],
@@ -13,9 +12,10 @@ class GamesService
     ].freeze
   end
 
-  def self.create_game(player_id)
+  def self.create_game!(player_id)
     x_first = _is_x_first?
-    Game.create!(:x_player_id => player_id, :x_first => x_first)
+    Game.create!(x_player_id: player_id, x_first: x_first)
+    GameResult.successful_result
   end
 
   def self.make_move(game_id:, player_id:, position:)
@@ -23,25 +23,27 @@ class GamesService
     return unless game.ready?
     return unless player_id == game.turn_player_id
 
-    Move.create!({ :game_id => game_id, :player_id => player_id, :position => position })
-    _check_win(:game => game)
-    ActionCable.server.broadcast "move_channel_#{game_id}",
-      position: Move.where(game_id: game_id).order("created_at").last.position,
-      type: Move.where(game_id: game_id).order("created_at").last.move_type
+    Move.create!(game_id: game_id, player_id: player_id, position: position)
+    _check_win(game: game)
   end
 
-  def self.generate_game_state(game_id)
+  def self.generate_game_state(game_id:, current_player_id:)
     game = Game.find(game_id)
-    GameState.new(:game_id => game.id,
-                  :turn_id => game.turn_player_id,
-                  :board   => Board.new(game.moves))
+    OpenStruct.new(
+      board: Board.new(game.moves).state,
+      is_turn: (current_player_id == game.turn_player_id)
+    )
   end
 
   def self.join_game(game_id:, player_id:)
     game = Game.find(game_id)
-    raise PlayerTryingToJoinFullGameError if game.ready?
-    game.update(:o_player_id => player_id)
+    return GameResult.game_full_result if game.ready?
+
+    game.update(o_player_id: player_id)
+    GameResult.successful_result
   end
+
+  private
 
   def self._is_x_first?
     [true, false].sample
@@ -50,10 +52,10 @@ class GamesService
 
   def self._check_win(game:)
     WinStates::ALL.each do |win_state|
-      moves_in_winstate = game.moves.where(:position => win_state)
-      return unless moves_in_winstate.count == 3
-      return unless moves_in_winstate.all? {|move| move.made_by_last_player?}
-      game.update!(:completed => true)
+      moves_in_winstate = game.moves.where(position: win_state)
+      break unless moves_in_winstate.count == 3
+      break unless moves_in_winstate.all?(&:made_by_last_player?)
+      game.update!(completed: true)
     end
   end
   private_class_method :_check_win

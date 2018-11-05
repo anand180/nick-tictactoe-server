@@ -1,5 +1,4 @@
 class Board
-
   module Spaces
     ALL = [
       TOP_LEFT = 0,
@@ -11,10 +10,10 @@ class Board
       BOTTOM_LEFT = 6,
       BOTTOM_MIDDLE = 7,
       BOTTOM_RIGHT = 8
-    ]
+    ].freeze
   end
 
-  BLANK_SPACE = "_".freeze
+  BLANK_SPACE = ' '.freeze
 
   attr_reader :state
 
