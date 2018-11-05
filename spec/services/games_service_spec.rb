@@ -13,39 +13,30 @@ RSpec.describe GamesService do
       end.to change {Game.count}
     end
 
-    context "game created" do
-      it "game should have correct initial state" do
-        game = GameService.create_game!(player_x.id)
-        expect(game.x_player_id).to eq(player_x.id)
-        expect(game.x_first).to eq(true).or eq(false)
-      end
+    it 'returns a successful result' do
+      result = GamesService.create_game!(player_x.id)
+      expect(result.success?).to be true
     end
   end
 
   describe ".make_move" do
     before do
-      Move.create(:player_id => player_x.id, :game_id => ready_game.id, :position => 0)
-      Move.create(:player_id => player_o.id, :game_id => ready_game.id, :position => 8)
-      Move.create(:player_id => player_x.id, :game_id => ready_game.id, :position => 1)
-      Move.create(:player_id => player_o.id, :game_id => ready_game.id, :position => 3)
+      Move.create(:player_id => ready_game.x_player_id, :game_id => ready_game.id, :position => 0)
+      Move.create(:player_id => ready_game.o_player_id, :game_id => ready_game.id, :position => 8)
+      Move.create(:player_id => ready_game.x_player_id, :game_id => ready_game.id, :position => 1)
+      Move.create(:player_id => ready_game.o_player_id, :game_id => ready_game.id, :position => 3)
     end
 
     context "when winning move" do
-      before do
-        GamesService.make_move({:player_id => player_x.id, :game_id => ready_game.id, :position => 2})
-      end
-
       it "completes the game" do
+        GamesService.make_move({:player_id => ready_game.x_player_id, :game_id => ready_game.id, :position => 2})
         expect(ready_game.reload.completed).to be true
       end
     end
 
     context "when not a winning move" do
-      before do
-        GamesService.make_move({:player_id => player_x.id, :game_id => ready_game.id, :position => 7})
-      end
-
       it "does not complete the game" do
+        GamesService.make_move({:player_id => ready_game.x_player_id, :game_id => ready_game.id, :position => 7})
         expect(ready_game.reload.completed).to be false
       end
     end
@@ -70,7 +61,7 @@ RSpec.describe GamesService do
   end
 
   describe ".generate_game_state" do
-    let(:result) {GamesService.generate_game_state(game_id: game.id, current_player_id: game.x_player_id)}
+    let(:result) {GamesService.generate_game_state(game_id: ready_game.id, current_player_id: ready_game.x_player_id)}
 
     context "game with 0 moves" do
       it "generates a blank board" do
@@ -90,9 +81,9 @@ RSpec.describe GamesService do
       end
 
       it "generate a board with filled top row" do
-        expect(result.board.value_at_space(Board::Spaces::TOP_LEFT)).to eq('x')
-        expect(result.board.value_at_space(Board::Spaces::TOP_MIDDLE)).to eq('o')
-        expect(result.board.value_at_space(Board::Spaces::TOP_RIGHT)).to eq('x')
+        expect(result.board[Board::Spaces::TOP_LEFT]).to eq('x')
+        expect(result.board[Board::Spaces::TOP_MIDDLE]).to eq('o')
+        expect(result.board[Board::Spaces::TOP_RIGHT]).to eq('x')
       end
 
       it "is not x's turn" do
