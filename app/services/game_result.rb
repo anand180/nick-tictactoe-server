@@ -4,6 +4,8 @@ class GameResult
     :game_full => 'This game is full'
   }
 
+  attr_reader :error_type, :success
+
   def initialize(success:, error_type: nil)
     @success = success
     @error_type = error_type
