@@ -1,7 +1,7 @@
 require 'rails_helper'
 
 RSpec.describe GamesController do
-  let(:player) {UserCreator.create_user_and_player("place_holder")}
+  let(:user) { UserCreator.create_user("email") }
   let(:unready_game) {GameCreator.create_unready_game}
   let(:ready_game) {GameCreator.create_ready_game}
 
@@ -10,17 +10,18 @@ RSpec.describe GamesController do
 
   describe "#update" do
     before do
-      session[:user_id] = player.user_id
+      user.create_player
+      session[:user_id] = user.id
       put :update, :params => {:id => unready_game.id}
     end
 
     it "adds an O player" do
-      binding.pry
       expect(unready_game.reload.ready?).to be true
     end
 
     it "redirects to index" do
-      expect(response).to be_redirect
+      json = JSON.parse(response.body)
+      expect(json['success']).to be true
     end
   end
 
