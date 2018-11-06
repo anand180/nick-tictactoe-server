@@ -1,14 +1,14 @@
 class GamesService
   module WinStates
     ALL = [
-      [Board::Spaces::TOP_LEFT, Board::Spaces::TOP_MIDDLE, Board::Spaces::TOP_RIGHT],
-      [Board::Spaces::MIDDLE_LEFT, Board::Spaces::MIDDLE_MIDDLE, Board::Spaces::MIDDLE_RIGHT],
-      [Board::Spaces::BOTTOM_LEFT, Board::Spaces::BOTTOM_MIDDLE, Board::Spaces::BOTTOM_RIGHT],
-      [Board::Spaces::TOP_LEFT, Board::Spaces::MIDDLE_LEFT, Board::Spaces::BOTTOM_LEFT],
-      [Board::Spaces::MIDDLE_LEFT, Board::Spaces::MIDDLE_MIDDLE, Board::Spaces::BOTTOM_MIDDLE],
-      [Board::Spaces::TOP_RIGHT, Board::Spaces::MIDDLE_RIGHT, Board::Spaces::BOTTOM_RIGHT],
-      [Board::Spaces::TOP_LEFT, Board::Spaces::MIDDLE_MIDDLE, Board::Spaces::BOTTOM_RIGHT],
-      [Board::Spaces::TOP_RIGHT, Board::Spaces::MIDDLE_MIDDLE, Board::Spaces::BOTTOM_LEFT],
+      [Board::Spaces::TOP_LEFT, Board::Spaces::TOP_MIDDLE, Board::Spaces::TOP_RIGHT].freeze,
+      [Board::Spaces::MIDDLE_LEFT, Board::Spaces::MIDDLE_MIDDLE, Board::Spaces::MIDDLE_RIGHT].freeze,
+      [Board::Spaces::BOTTOM_LEFT, Board::Spaces::BOTTOM_MIDDLE, Board::Spaces::BOTTOM_RIGHT].freeze,
+      [Board::Spaces::TOP_LEFT, Board::Spaces::MIDDLE_LEFT, Board::Spaces::BOTTOM_LEFT].freeze,
+      [Board::Spaces::MIDDLE_LEFT, Board::Spaces::MIDDLE_MIDDLE, Board::Spaces::BOTTOM_MIDDLE].freeze,
+      [Board::Spaces::TOP_RIGHT, Board::Spaces::MIDDLE_RIGHT, Board::Spaces::BOTTOM_RIGHT].freeze,
+      [Board::Spaces::TOP_LEFT, Board::Spaces::MIDDLE_MIDDLE, Board::Spaces::BOTTOM_RIGHT].freeze,
+      [Board::Spaces::TOP_RIGHT, Board::Spaces::MIDDLE_MIDDLE, Board::Spaces::BOTTOM_LEFT].freeze,
     ].freeze
   end
 
