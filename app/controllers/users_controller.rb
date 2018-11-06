@@ -5,16 +5,12 @@ class UsersController < ApplicationController
     end
   end
 
-  def new
-    @user = User.new
-  end
-
   def create
     result = UserService.create!(_user_params)
     if result.success?
       render json: { success: true }
     elsif result.duplicate?
-      render json: { error: 'This email address is taken' }, status: 422
+      render json: { error: result.error_message }, status: 422
     else
       raise UserCreationError
     end
