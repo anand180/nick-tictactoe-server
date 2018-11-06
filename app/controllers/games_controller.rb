@@ -12,17 +12,19 @@ class GamesController < ApplicationController
 
   def create
     result = GamesService.create_game!(current_player.id)
-    if(result.game_full?)
+    if (result.success?)
+      render :json => { success: true }
+    end
+  end
+
+  def update
+    result = GamesService.join_game(:player_id => current_player.id, :game_id => params[:id])
+    if (result.game_full?)
       render :json => { success: false, error: result.error_message }
     elsif (result.success?)
       render :json => { success: true }
     else
       raise
     end
-  end
-
-  def update
-    GamesService.join_game(:player_id => current_player.id, :game_id => params[:id])
-    render :json => { success: true }
   end
 end

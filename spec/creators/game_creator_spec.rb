@@ -40,4 +40,11 @@ RSpec.describe GameCreator do
       end
     end
   end
+
+  describe '.create_game_with_moves' do
+    it 'creates a game with moves' do
+      game = GameCreator.create_game_with_moves
+      expect(game.moves).to be_present
+    end
+  end
 end
