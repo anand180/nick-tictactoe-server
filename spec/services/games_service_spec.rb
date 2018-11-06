@@ -1,8 +1,8 @@
 require 'rails_helper'
 
 RSpec.describe GamesService do
-  let(:player_o) {Player.create}
-  let(:player_x) {Player.create}
+  let(:player_o) { UserCreator.create_user.player }
+  let(:player_x) { UserCreator.create_user.player }
   let(:ready_game) {GameCreator.create_ready_game}
   let(:unready_game) {GameCreator.create_unready_game}
 
@@ -43,7 +43,7 @@ RSpec.describe GamesService do
   end
 
   describe ".join_game" do
-    let(:player) { Player.create }
+    let(:player) { UserCreator.create_user.player }
 
     context "unready game" do
       it "adds an O player" do

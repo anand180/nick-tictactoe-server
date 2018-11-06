@@ -1,8 +1,8 @@
 require 'rails_helper'
 
 RSpec.describe PlayerService do
-  let(:player_1) { Player.create }
-  let(:player_2) { Player.create }
+  let(:player_1) { UserCreator.create_user.player }
+  let(:player_2) { UserCreator.create_user.player }
 
   describe '.dashboard_game_lists' do
     before do
