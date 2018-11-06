@@ -13,6 +13,4 @@ Rails.application.routes.draw do
   resources :games, :moves
 
   match '*path', via: [:options], to: lambda {|_| [204, { 'Content-Type' => 'text/plain' }]}
-
-  mount ActionCable.server, at: '/cable'
 end
